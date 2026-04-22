@@ -1,35 +1,126 @@
-<!DOCTYPE html>
-<html>
+ï»¿<!DOCTYPE html>
+<html lang="en">
 <head>
-    <title>Result</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Result | Cognito</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            background: white;
+            border-radius: 16px;
+            padding: 32px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        }
+        h1, h2 {
+            margin-bottom: 16px;
+        }
+        .badge {
+            display: inline-block;
+            padding: 10px 16px;
+            border-radius: 999px;
+            background: #111827;
+            color: white;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin: 24px 0;
+        }
+        .card {
+            background: #f9fafb;
+            border-radius: 12px;
+            padding: 18px;
+            border: 1px solid #e5e7eb;
+        }
+        .card h3 {
+            margin: 0 0 8px 0;
+            font-size: 14px;
+            color: #6b7280;
+        }
+        .card p {
+            margin: 0;
+            font-size: 22px;
+            font-weight: bold;
+        }
+        .responses {
+            margin-top: 24px;
+        }
+        .response-item {
+            padding: 14px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        .btn {
+            display: inline-block;
+            margin-top: 24px;
+            text-decoration: none;
+            background: #2563eb;
+            color: white;
+            padding: 12px 18px;
+            border-radius: 10px;
+            font-weight: bold;
+        }
+        .btn:hover {
+            background: #1d4ed8;
+        }
+        @media (max-width: 768px) {
+            .stats {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 <body>
-    <h1>Your Decision Profile</h1>
+    <div class="container">
+        <h1>Your Decision Profile</h1>
+        <div class="badge">{{ session.decision_style }}</div>
 
-    <p><strong>Decision Style:</strong> {{ session.decision_style }}</p>
-    <p><strong>Average Response Time:</strong> {{ session.avg_response_time }} seconds</p>
-    <p><strong>Total Hesitations:</strong> {{ session.total_hesitations }}</p>
+        <div class="stats">
+            <div class="card">
+                <h3>Average Response Time</h3>
+                <p>{{ session.avg_response_time }} s</p>
+            </div>
+            <div class="card">
+                <h3>Total Hesitations</h3>
+                <p>{{ session.total_hesitations }}</p>
+            </div>
+            <div class="card">
+                <h3>Questions Answered</h3>
+                <p>{{ responses|length }}</p>
+            </div>
+        </div>
 
-    <h2>Interpretation</h2>
-    {% if session.decision_style == "Impulsive" %}
-        <p>You tend to make fast, intuitive choices with low delay.</p>
-    {% elif session.decision_style == "Analytical" %}
-        <p>You tend to slow down and evaluate options carefully before choosing.</p>
-    {% else %}
-        <p>You show a balanced mix of intuitive and deliberate decision-making.</p>
-    {% endif %}
+        <h2>Interpretation</h2>
+        {% if session.decision_style == "Impulsive" %}
+            <p>You tend to make fast, intuitive choices with low delay. This suggests stronger reliance on immediate judgment and low hesitation.</p>
+        {% elif session.decision_style == "Analytical" %}
+            <p>You tend to slow down and evaluate options carefully before choosing. This suggests a more deliberate and reflective decision-making pattern.</p>
+        {% else %}
+            <p>You show a balanced mix of intuition and deliberation. You respond with moderate speed while still evaluating options to some extent.</p>
+        {% endif %}
 
-    <h2>Responses</h2>
-    <ul>
-        {% for response in responses %}
-            <li>
-                {{ response.question_text }} —
-                {{ response.selected_option }}
-                ({{ response.response_time }}s)
-            </li>
-        {% endfor %}
-    </ul>
+        <div class="responses">
+            <h2>Your Responses</h2>
+            {% for response in responses %}
+                <div class="response-item">
+                    <strong>{{ forloop.counter }}. {{ response.question_text }}</strong><br>
+                    Answer: {{ response.selected_option }}<br>
+                    Response Time: {{ response.response_time }} s
+                </div>
+            {% endfor %}
+        </div>
 
-    <a href="{% url 'analyzer:home' %}">Try Again</a>
+        <a class="btn" href="{% url 'analyzer:home' %}">Take Quiz Again</a>
+    </div>
 </body>
 </html>
