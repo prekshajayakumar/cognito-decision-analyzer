@@ -1,27 +1,82 @@
-<!DOCTYPE html>
-<html>
+﻿<!DOCTYPE html>
+<html lang="en">
 <head>
-    <title>Question {{ index|add:1 }}</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Question {{ index|add:1 }} | Cognito</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f3f6fb;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            background: white;
+            border-radius: 18px;
+            padding: 32px;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+        }
+        .progress {
+            font-size: 14px;
+            color: #6b7280;
+            margin-bottom: 12px;
+        }
+        h2 {
+            margin-bottom: 20px;
+        }
+        .option {
+            margin-bottom: 14px;
+            padding: 14px;
+            border: 1px solid #d1d5db;
+            border-radius: 12px;
+            transition: 0.2s ease;
+        }
+        .option:hover {
+            background: #f9fafb;
+        }
+        label {
+            display: block;
+            cursor: pointer;
+        }
+        button {
+            margin-top: 20px;
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 12px 18px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #1d4ed8;
+        }
+    </style>
 </head>
 <body>
-    <h2>Question {{ index|add:1 }} of {{ total }}</h2>
-    <p>{{ question.text }}</p>
+    <div class="container">
+        <div class="progress">Question {{ index|add:1 }} of {{ total }}</div>
+        <h2>{{ question.text }}</h2>
 
-    <form method="post">
-        {% csrf_token %}
-        <input type="hidden" name="start_time" value="{{ start_time }}">
+        <form method="post">
+            {% csrf_token %}
+            <input type="hidden" name="start_time" value="{{ start_time }}">
 
-        {% for option in question.options %}
-            <div>
-                <label>
-                    <input type="radio" name="option" value="{{ option }}" required>
-                    {{ option }}
-                </label>
-            </div>
-        {% endfor %}
+            {% for option in question.options %}
+                <div class="option">
+                    <label>
+                        <input type="radio" name="option" value="{{ option }}" required>
+                        {{ option }}
+                    </label>
+                </div>
+            {% endfor %}
 
-        <br>
-        <button type="submit">Next</button>
-    </form>
+            <button type="submit">Next</button>
+        </form>
+    </div>
 </body>
 </html>

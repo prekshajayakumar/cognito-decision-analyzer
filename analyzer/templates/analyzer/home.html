@@ -1,14 +1,67 @@
-<!DOCTYPE html>
-<html>
+﻿<!DOCTYPE html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cognito</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            color: white;
+            margin: 0;
+            padding: 0;
+        }
+        .hero {
+            max-width: 900px;
+            margin: 80px auto;
+            text-align: center;
+            padding: 40px;
+        }
+        h1 {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+        p {
+            font-size: 18px;
+            color: #cbd5e1;
+            line-height: 1.6;
+        }
+        .card {
+            margin-top: 32px;
+            background: rgba(255,255,255,0.08);
+            padding: 30px;
+            border-radius: 20px;
+            backdrop-filter: blur(6px);
+        }
+        .btn {
+            display: inline-block;
+            margin-top: 24px;
+            background: #38bdf8;
+            color: #0f172a;
+            padding: 14px 22px;
+            border-radius: 12px;
+            font-weight: bold;
+            text-decoration: none;
+        }
+        .btn:hover {
+            background: #0ea5e9;
+        }
+    </style>
 </head>
 <body>
-    <h1>Cognito: Decision Style Analyzer</h1>
-    <p>
-        This system estimates whether a user is impulsive, analytical,
-        or balanced by measuring decision time and hesitation during a quiz.
-    </p>
-    <a href="{% url 'analyzer:start_quiz' %}">Start Quiz</a>
+    <div class="hero">
+        <h1>Cognito</h1>
+        <p>Decision Style Analyzer</p>
+
+        <div class="card">
+            <p>
+                This system analyzes how you make choices during a short quiz.
+                Using response time and hesitation patterns, it estimates whether your
+                decision-making style is more impulsive, analytical, or balanced.
+            </p>
+            <a class="btn" href="{% url 'analyzer:start_quiz' %}">Start Quiz</a>
+        </div>
+    </div>
 </body>
 </html>
