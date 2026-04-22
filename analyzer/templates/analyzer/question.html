@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Question {{ index|add:1 }}</title>
+</head>
+<body>
+    <h2>Question {{ index|add:1 }} of {{ total }}</h2>
+    <p>{{ question.text }}</p>
+
+    <form method="post">
+        {% csrf_token %}
+        <input type="hidden" name="start_time" value="{{ start_time }}">
+
+        {% for option in question.options %}
+            <div>
+                <label>
+                    <input type="radio" name="option" value="{{ option }}" required>
+                    {{ option }}
+                </label>
+            </div>
+        {% endfor %}
+
+        <br>
+        <button type="submit">Next</button>
+    </form>
+</body>
+</html>

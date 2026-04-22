@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Result</title>
+</head>
+<body>
+    <h1>Your Decision Profile</h1>
+
+    <p><strong>Decision Style:</strong> {{ session.decision_style }}</p>
+    <p><strong>Average Response Time:</strong> {{ session.avg_response_time }} seconds</p>
+    <p><strong>Total Hesitations:</strong> {{ session.total_hesitations }}</p>
+
+    <h2>Interpretation</h2>
+    {% if session.decision_style == "Impulsive" %}
+        <p>You tend to make fast, intuitive choices with low delay.</p>
+    {% elif session.decision_style == "Analytical" %}
+        <p>You tend to slow down and evaluate options carefully before choosing.</p>
+    {% else %}
+        <p>You show a balanced mix of intuitive and deliberate decision-making.</p>
+    {% endif %}
+
+    <h2>Responses</h2>
+    <ul>
+        {% for response in responses %}
+            <li>
+                {{ response.question_text }} —
+                {{ response.selected_option }}
+                ({{ response.response_time }}s)
+            </li>
+        {% endfor %}
+    </ul>
+
+    <a href="{% url 'analyzer:home' %}">Try Again</a>
+</body>
+</html>
