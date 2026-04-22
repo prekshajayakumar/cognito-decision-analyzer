@@ -31,3 +31,7 @@ class ResponseAdmin(admin.ModelAdmin):
     list_filter = ("hesitation", "created_at")
     search_fields = ("question_text", "selected_option")
     ordering = ("-created_at",)
+
+admin.site.site_header = "Cognito Admin"
+admin.site.site_title = "Cognito Admin Portal"
+admin.site.index_title = "Decision Analyzer Dashboard"
