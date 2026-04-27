@@ -3,124 +3,268 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Result | Cognito</title>
+    <title>AI Result | Cognito</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <style>
+        * {
+            box-sizing: border-box;
+        }
+
         body {
+            margin: 0;
             font-family: Arial, sans-serif;
-            background: #f4f7fb;
-            margin: 0;
-            padding: 0;
-        }
-        .container {
-            max-width: 900px;
-            margin: 40px auto;
-            background: white;
-            border-radius: 16px;
-            padding: 32px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-        }
-        h1, h2 {
-            margin-bottom: 16px;
-        }
-        .badge {
-            display: inline-block;
-            padding: 10px 16px;
-            border-radius: 999px;
-            background: #111827;
+            background: linear-gradient(135deg, #0f172a, #1e293b);
             color: white;
-            font-weight: bold;
-            margin-bottom: 20px;
+            min-height: 100vh;
         }
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 16px;
-            margin: 24px 0;
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 48px 24px;
         }
-        .card {
-            background: #f9fafb;
-            border-radius: 12px;
-            padding: 18px;
-            border: 1px solid #e5e7eb;
+
+        .hero {
+            text-align: center;
+            margin-bottom: 36px;
         }
-        .card h3 {
-            margin: 0 0 8px 0;
-            font-size: 14px;
-            color: #6b7280;
+
+        .hero h1 {
+            font-size: 44px;
+            margin-bottom: 10px;
         }
-        .card p {
-            margin: 0;
+
+        .hero p {
+            color: #cbd5e1;
+            font-size: 18px;
+        }
+
+        .result-badge {
+            display: inline-block;
+            margin-top: 18px;
+            padding: 14px 28px;
+            border-radius: 999px;
+            background: #38bdf8;
+            color: #0f172a;
             font-size: 22px;
             font-weight: bold;
         }
+
+        .glass-card {
+            background: rgba(255,255,255,0.09);
+            border: 1px solid rgba(255,255,255,0.14);
+            border-radius: 24px;
+            padding: 28px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+            margin-bottom: 24px;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+            margin-bottom: 24px;
+        }
+
+        .stat {
+            background: rgba(255,255,255,0.10);
+            border-radius: 18px;
+            padding: 22px;
+            text-align: center;
+        }
+
+        .stat span {
+            display: block;
+            color: #94a3b8;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .stat strong {
+            font-size: 28px;
+        }
+
+        h2 {
+            margin-top: 0;
+        }
+
+        .interpretation {
+            color: #e2e8f0;
+            line-height: 1.7;
+            font-size: 17px;
+        }
+
+        .chart-box {
+            background: white;
+            border-radius: 20px;
+            padding: 24px;
+            margin-top: 20px;
+        }
+
         .responses {
-            margin-top: 24px;
+            display: grid;
+            gap: 14px;
+            margin-top: 18px;
         }
+
         .response-item {
-            padding: 14px;
-            border-bottom: 1px solid #e5e7eb;
+            background: rgba(255,255,255,0.08);
+            border-radius: 16px;
+            padding: 16px;
+            border-left: 4px solid #38bdf8;
         }
+
+        .response-item small {
+            color: #cbd5e1;
+        }
+
         .btn {
             display: inline-block;
-            margin-top: 24px;
+            margin-top: 28px;
+            background: #38bdf8;
+            color: #0f172a;
+            padding: 14px 24px;
+            border-radius: 14px;
             text-decoration: none;
-            background: #2563eb;
-            color: white;
-            padding: 12px 18px;
-            border-radius: 10px;
             font-weight: bold;
         }
+
         .btn:hover {
-            background: #1d4ed8;
+            background: #0ea5e9;
         }
-        @media (max-width: 768px) {
+
+        @media (max-width: 850px) {
+            .stats {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .hero h1 {
+                font-size: 34px;
+            }
+        }
+
+        @media (max-width: 520px) {
             .stats {
                 grid-template-columns: 1fr;
             }
         }
     </style>
 </head>
+
 <body>
     <div class="container">
-        <h1>Your Decision Profile</h1>
-        <div class="badge">{{ session.decision_style }}</div>
+        <div class="hero">
+            <h1>Your AI Decision Profile</h1>
+            <p>Cognito analyzed your response timing, hesitation pattern, and decision consistency.</p>
+            <div class="result-badge">{{ session.predicted_style }}</div>
+        </div>
 
         <div class="stats">
-            <div class="card">
-                <h3>Average Response Time</h3>
-                <p>{{ session.avg_response_time }} s</p>
+            <div class="stat">
+                <span>Confidence</span>
+                <strong>{{ session.confidence_score }}%</strong>
             </div>
-            <div class="card">
-                <h3>Total Hesitations</h3>
-                <p>{{ session.total_hesitations }}</p>
+            <div class="stat">
+                <span>Average Time</span>
+                <strong>{{ session.avg_response_time }}s</strong>
             </div>
-            <div class="card">
-                <h3>Questions Answered</h3>
-                <p>{{ responses|length }}</p>
+            <div class="stat">
+                <span>Total Time</span>
+                <strong>{{ session.total_time }}s</strong>
+            </div>
+            <div class="stat">
+                <span>Hesitations</span>
+                <strong>{{ session.hesitation_count }}</strong>
             </div>
         </div>
 
-        <h2>Interpretation</h2>
-        {% if session.decision_style == "Impulsive" %}
-            <p>You tend to make fast, intuitive choices with low delay. This suggests stronger reliance on immediate judgment and low hesitation.</p>
-        {% elif session.decision_style == "Analytical" %}
-            <p>You tend to slow down and evaluate options carefully before choosing. This suggests a more deliberate and reflective decision-making pattern.</p>
-        {% else %}
-            <p>You show a balanced mix of intuition and deliberation. You respond with moderate speed while still evaluating options to some extent.</p>
-        {% endif %}
+        <div class="glass-card">
+            <h2>Behavioral Interpretation</h2>
 
-        <div class="responses">
-            <h2>Your Responses</h2>
-            {% for response in responses %}
-                <div class="response-item">
-                    <strong>{{ forloop.counter }}. {{ response.question_text }}</strong><br>
-                    Answer: {{ response.selected_option }}<br>
-                    Response Time: {{ response.response_time }} s
-                </div>
-            {% endfor %}
+            {% if session.predicted_style == "Impulsive" %}
+                <p class="interpretation">
+                    Your response pattern shows fast decision-making with low hesitation.
+                    This suggests a stronger reliance on intuitive, rapid-choice processing.
+                </p>
+            {% elif session.predicted_style == "Analytical" %}
+                <p class="interpretation">
+                    Your response pattern shows slower decisions and higher hesitation.
+                    This suggests a more deliberate and reflective decision-making style.
+                </p>
+            {% else %}
+                <p class="interpretation">
+                    Your response pattern shows a balance between intuition and reflection.
+                    You made decisions with moderate speed while still evaluating options.
+                </p>
+            {% endif %}
         </div>
 
-        <a class="btn" href="{% url 'analyzer:home' %}">Take Quiz Again</a>
+        <div class="glass-card">
+            <h2>Response Time Pattern</h2>
+            <div class="chart-box">
+                <canvas id="timeChart"></canvas>
+            </div>
+        </div>
+
+        <div class="glass-card">
+            <h2>Question-Level Breakdown</h2>
+
+            <div class="responses">
+                {% for response in responses %}
+                    <div class="response-item">
+                        <strong>Q{{ response.question_number }}. {{ response.question_text }}</strong><br>
+                        <small>
+                            Answer: {{ response.selected_option }} |
+                            Time: {{ response.response_time }}s |
+                            Hesitation: {{ response.hesitation }}
+                        </small>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <a class="btn" href="{% url 'analyzer:home' %}">Take Quiz Again</a>
+        </div>
     </div>
+
+    {{ response_times|json_script:"response-times-data" }}
+
+    <script>
+        const responseTimes = JSON.parse(document.getElementById("response-times-data").textContent);
+
+        new Chart(document.getElementById("timeChart"), {
+            type: "line",
+            data: {
+                labels: responseTimes.map((_, index) => "Q" + (index + 1)),
+                datasets: [{
+                    label: "Response Time (seconds)",
+                    data: responseTimes,
+                    borderWidth: 3,
+                    tension: 0.35,
+                    fill: false
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: "#0f172a"
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        ticks: { color: "#0f172a" }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        ticks: { color: "#0f172a" }
+                    }
+                }
+            }
+        });
+    </script>
 </body>
 </html>
